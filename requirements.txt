@@ -1,0 +1,13 @@
+# Core dependencies for PulmoFoundation
+torch>=2.0.1
+timm>=1.0.11
+peft>=0.17.1
+
+# Image processing
+Pillow>=11.0.0
+opencv-python>=4.10.0.84
+
+# Utilities
+numpy=1.26.4
+h5py=3.12.0
+
