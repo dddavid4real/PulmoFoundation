@@ -27,11 +27,13 @@ pip install -r requirements.txt
 
 ### Download Model Checkpoint
 
+🌟 The pretrained checkpoint of PulmoFoundation is provided here: https://huggingface.co/david4real/PulmoFoundation.
+
 Download the pre-trained checkpoint and place it in `models/ckpts/`:
 
 ```bash
 mkdir -p models/ckpts
-# Download PulmoFoundation-E2.pth from Github Release to models/ckpts/
+# Download PulmoFoundation-E2.pth from HuggingFace to models/ckpts/
 ```
 
 ## Quick Start
