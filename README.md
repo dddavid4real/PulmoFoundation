@@ -4,6 +4,9 @@
 
 ## Installation
 
+### Prerequisites
+- Request for Virchow2 model on [Huggingface](https://huggingface.co/paige-ai/Virchow2).
+
 ### Install Dependencies
 
 ```bash
@@ -14,7 +17,7 @@ pip install -r requirements.txt
 
 ### Download Model Checkpoint
 
-🌟 The pretrained checkpoint of PulmoFoundation is provided here: https://huggingface.co/david4real/PulmoFoundation.
+🌟 The pretrained checkpoint of PulmoFoundation is provided [here](https://huggingface.co/david4real/PulmoFoundation).
 
 Download the pre-trained checkpoint and place it in `models/ckpts/`:
 
