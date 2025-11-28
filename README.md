@@ -2,20 +2,7 @@
 
 **PulmoFoundation** is a foundation model specifically designed for lung pathology whole-slide image analysis. Built on the Virchow2 architecture with LoRA continual pretraining, it provides state-of-the-art feature embeddings for computational pathology applications in lung cancer and respiratory disease research.
 
-## Features
-
-- **Lung-Specific**: Fine-tuned on extensive lung pathology datasets
-
 ## Installation
-
-### Prerequisites
-
-- Python >= 3.8
-- PyTorch = 2.0.1
-- peft = 0.17.1
-- time = 1.0.11
-- Pillow = 11.0.0 
-- opencv-python = 4.10.0.84
 
 ### Install Dependencies
 
