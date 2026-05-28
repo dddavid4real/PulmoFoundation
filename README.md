@@ -93,4 +93,5 @@ features = model(batch)  # Shape: [N, 2560]
 
 ## Version History
 
+- **v1.1.0** (2026-05): Update with PulmoFoundation Downstream Evaluation Workflow
 - **v1.0.0** (2025-12): Initial release with PulmoFoundation checkpoint
