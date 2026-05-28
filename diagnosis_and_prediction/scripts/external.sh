@@ -19,7 +19,7 @@ do
                                                   --feature $model \
                                                   --csv_file dataset_csv/${study}.csv \
                                                   --evaluate \
-                                                  --resume ./results/results_42/NSCLC/[ABMIL] \
+                                                  --resume './results/results_42/NSCLC/[ABMIL]' \
                                                   --tqdm > "${log_dir}/${study}_${model}.log" 2>&1 &
     done
     
@@ -39,7 +39,7 @@ do
     #                                               --feature $model \
     #                                               --csv_file dataset_csv/${study}.csv \
     #                                               --evaluate \
-    #                                               --resume ./results/results_42/EGFR/[ABMIL] \
+    #                                               --resume './results/results_42/EGFR/[ABMIL]' \
     #                                               --tqdm > "${log_dir}/${study}_${model}.log" 2>&1 &
     # done
     

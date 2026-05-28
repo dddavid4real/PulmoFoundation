@@ -94,6 +94,8 @@ Downstream diagnosis and survival scripts expect the feature root to be:
 FEATURE_ROOT=/path/to/TCGA__NSCLC/pt_files
 ```
 
+The same `TCGA__NSCLC/pt_files` feature folder is used for the released TCGA NSCLC subtyping, EGFR/STK11 molecular prediction, and LUAD/LUSC survival examples.
+
 ## Released Downstream Examples
 
 | Task type | Task | CSV file | Feature root |
