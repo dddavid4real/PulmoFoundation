@@ -1,6 +1,6 @@
 # PulmoFoundation
 
-**PulmoFoundation** is a foundation model specifically designed for lung pathology whole-slide image analysis. Built on the Virchow2 architecture with LoRA continual pretraining, it provides state-of-the-art feature embeddings for computational pathology applications in lung cancer and respiratory disease research.
+**PulmoFoundation** is a foundation model specifically designed for lung pathology whole-slide image analysis. Built on the Virchow2 architecture with LoRA continual pretraining, it provides feature embeddings for computational pathology applications in lung cancer and respiratory disease research.
 
 ## Installation
 
@@ -18,9 +18,14 @@ pip install -e .
 
 The editable install registers the importable `model_loading` package, so examples can use `from model_loading import get_model, get_transform` from outside the repository directory as well. The downstream diagnosis and survival folders are script-based workflows and should be run from their own directories.
 
-### Download Model Checkpoint
+### Download Model Checkpoint and Features
 
-The pretrained checkpoint of PulmoFoundation is provided [here](https://huggingface.co/david4real/PulmoFoundation).
+The pretrained checkpoint and public TCGA-NSCLC feature archive are provided through the [PulmoFoundation Hugging Face repository](https://huggingface.co/david4real/PulmoFoundation):
+
+```text
+PulmoFoundation-E2.pth        # encoder checkpoint
+TCGA__NSCLC.z01/.z02/.zip     # public TCGA feature archive
+```
 
 Download the pretrained checkpoint and place it in `model_loading/ckpts/`:
 
@@ -80,6 +85,8 @@ TCGA__NSCLC/
     PulmoFoundation-E2/
       *.pt
 ```
+
+The downstream examples use `pt_files/`. The `patches/` folder is included for transparency and inspection.
 
 Downstream diagnosis and survival scripts expect the feature root to be:
 
@@ -161,7 +168,7 @@ python main.py \
   --feature PulmoFoundation-E2 \
   --csv_file dataset_csv/External_TCGA_NSCLC.csv \
   --evaluate \
-  --resume ./results/results_42/NSCLC/[ABMIL] \
+  --resume './results/results_42/NSCLC/[ABMIL]' \
   --tqdm
 ```
 
@@ -175,7 +182,7 @@ python main.py \
   --feature PulmoFoundation-E2 \
   --csv_file dataset_csv/External_TCGA_EGFR.csv \
   --evaluate \
-  --resume ./results/results_42/EGFR/[ABMIL] \
+  --resume './results/results_42/EGFR/[ABMIL]' \
   --tqdm
 ```
 
@@ -228,6 +235,8 @@ Survival outputs are written to:
 survival_analysis/results/WSI/<TASK>/...
 ```
 
+Survival examples are released as training workflows from TCGA features. Trained survival checkpoints are not bundled in this release.
+
 ## CSV and Feature Naming Conventions
 
 Diagnosis CSV files use this schema:
@@ -274,6 +283,7 @@ This repository releases:
 - Public TCGA-NSCLC feature tensors for reviewer testing.
 - Public TCGA CSV manifests.
 - Released ABMIL checkpoints for TCGA NSCLC and EGFR evaluation.
+- Survival training workflows for TCGA-LUAD and TCGA-LUSC.
 
 Private institutional slides, private feature tensors, and private annotation files are not included.
 

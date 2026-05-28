@@ -20,6 +20,30 @@ Run the commands below from this folder:
 cd diagnosis_and_prediction
 ```
 
+## Public Feature Package
+
+For reviewer testing, download the public TCGA-NSCLC PulmoFoundation-E2 feature archive from the [PulmoFoundation Hugging Face repository](https://huggingface.co/david4real/PulmoFoundation):
+
+```text
+TCGA__NSCLC.z01
+TCGA__NSCLC.z02
+TCGA__NSCLC.zip
+```
+
+Place all three archive parts in the same directory, then unzip from the `.zip` file:
+
+```bash
+unzip TCGA__NSCLC.zip
+```
+
+The downstream scripts use:
+
+```bash
+FEATURE_ROOT=/path/to/TCGA__NSCLC/pt_files
+```
+
+The extracted `patches/` folder is included for transparency and inspection; diagnosis commands use `pt_files/`.
+
 ## Data Format
 
 Feature tensors should be organized as `root/feature/slide.pt`:
@@ -59,7 +83,7 @@ Equivalent direct command:
 python main.py \
   --model ABMIL \
   --study TCGA_STK11 \
-  --root path/to/pt_files \
+  --root ${FEATURE_ROOT} \
   --feature PulmoFoundation-E2 \
   --csv_file dataset_csv/TCGA_STK11.csv \
   --num_epoch 25 \
@@ -87,17 +111,31 @@ results/results_42/EGFR/[ABMIL]/
 
 `scripts/external.sh` evaluates the NSCLC checkpoint by default. The EGFR block is included in the script as a commented example.
 
-Equivalent direct command:
+Equivalent direct NSCLC command:
 
 ```bash
 python main.py \
   --model ABMIL \
   --study External_TCGA_NSCLC \
-  --root path/to/pt_files \
+  --root ${FEATURE_ROOT} \
   --feature PulmoFoundation-E2 \
   --csv_file dataset_csv/External_TCGA_NSCLC.csv \
   --evaluate \
-  --resume ./results/results_42/NSCLC/[ABMIL] \
+  --resume './results/results_42/NSCLC/[ABMIL]' \
+  --tqdm
+```
+
+Equivalent direct EGFR command:
+
+```bash
+python main.py \
+  --model ABMIL \
+  --study External_TCGA_EGFR \
+  --root ${FEATURE_ROOT} \
+  --feature PulmoFoundation-E2 \
+  --csv_file dataset_csv/External_TCGA_EGFR.csv \
+  --evaluate \
+  --resume './results/results_42/EGFR/[ABMIL]' \
   --tqdm
 ```
 

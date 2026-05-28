@@ -20,6 +20,30 @@ Run the commands below from this folder:
 cd survival_analysis
 ```
 
+## Public Feature Package
+
+For reviewer testing, download the public TCGA-NSCLC PulmoFoundation-E2 feature archive from the [PulmoFoundation Hugging Face repository](https://huggingface.co/david4real/PulmoFoundation):
+
+```text
+TCGA__NSCLC.z01
+TCGA__NSCLC.z02
+TCGA__NSCLC.zip
+```
+
+Place all three archive parts in the same directory, then unzip from the `.zip` file:
+
+```bash
+unzip TCGA__NSCLC.zip
+```
+
+The downstream scripts use:
+
+```bash
+FEATURE_ROOT=/path/to/TCGA__NSCLC/pt_files
+```
+
+The extracted `patches/` folder is included for transparency and inspection; survival commands use `pt_files/`.
+
 ## Data Format
 
 Feature tensors should be organized as `feature_path/feature/slide.pt`:
@@ -53,15 +77,36 @@ Update `feature_path` in [scripts/internal.sh](scripts/internal.sh), then run:
 bash scripts/internal.sh
 ```
 
-Equivalent direct command:
+Set the feature root and run the desired task directly:
+
+```bash
+FEATURE_ROOT=/path/to/TCGA__NSCLC/pt_files
+```
+
+Direct LUAD command:
 
 ```bash
 python main.py \
   --model AttMIL \
   --csv_file ./dataset_csv/LUAD.csv \
-  --feature_path path/to/pt_files \
+  --feature_path ${FEATURE_ROOT} \
   --feature PulmoFoundation-E2 \
   --study LUAD \
+  --modal WSI \
+  --num_epoch 20 \
+  --batch_size 1 \
+  --lr 2e-4
+```
+
+Direct LUSC command:
+
+```bash
+python main.py \
+  --model AttMIL \
+  --csv_file ./dataset_csv/LUSC.csv \
+  --feature_path ${FEATURE_ROOT} \
+  --feature PulmoFoundation-E2 \
+  --study LUSC \
   --modal WSI \
   --num_epoch 20 \
   --batch_size 1 \
@@ -72,13 +117,17 @@ Training outputs are written to `results/`.
 
 ## Evaluation
 
-To evaluate a saved checkpoint, pass `--evaluate` and set `--resume` to a results directory containing a matching checkpoint folder:
+Survival examples are released as training workflows from TCGA features. Trained survival checkpoints are not bundled in this release.
+
+To evaluate a saved survival model, train a checkpoint first, then pass `--evaluate` and set `--resume` to a results directory containing a matching checkpoint folder:
 
 ```bash
+FEATURE_ROOT=/path/to/TCGA__NSCLC/pt_files
+
 python main.py \
   --model AttMIL \
   --csv_file ./dataset_csv/LUAD.csv \
-  --feature_path path/to/pt_files \
+  --feature_path ${FEATURE_ROOT} \
   --feature PulmoFoundation-E2 \
   --study LUAD \
   --modal WSI \
