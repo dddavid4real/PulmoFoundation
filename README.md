@@ -42,6 +42,61 @@ For WSI preprocessing, including coordinate extraction, patch cropping, and feat
 
 See [diagnosis_and_prediction](diagnosis_and_prediction/) and [survival_analysis](survival_analysis/) for the released downstream MIL workflows.
 
+## Workflow Overview
+
+```text
+Raw WSI
+  -> PrePATH tissue detection, tiling, and patch extraction
+  -> PulmoFoundation-E2 patch feature extraction
+  -> Slide-level feature tensors in TCGA__NSCLC/pt_files/
+  -> ABMIL diagnosis and molecular prediction
+  -> AttMIL survival analysis
+```
+
+## Public TCGA-NSCLC Feature Package
+
+For reviewer convenience, we provide pre-extracted TCGA-NSCLC PulmoFoundation-E2 features through the [PulmoFoundation Hugging Face repository](https://huggingface.co/david4real/PulmoFoundation).
+
+Download all three archive parts into the same directory:
+
+```text
+TCGA__NSCLC.z01
+TCGA__NSCLC.z02
+TCGA__NSCLC.zip
+```
+
+Then unzip from the `.zip` file:
+
+```bash
+unzip TCGA__NSCLC.zip
+```
+
+The extracted folder should have this structure:
+
+```text
+TCGA__NSCLC/
+  patches/
+  pt_files/
+    PulmoFoundation-E2/
+      *.pt
+```
+
+Downstream diagnosis and survival scripts expect the feature root to be:
+
+```bash
+FEATURE_ROOT=/path/to/TCGA__NSCLC/pt_files
+```
+
+## Released Downstream Examples
+
+| Task type | Task | CSV file | Feature root |
+|---|---|---|---|
+| Diagnosis | TCGA NSCLC subtyping | `diagnosis_and_prediction/dataset_csv/External_TCGA_NSCLC.csv` | `TCGA__NSCLC/pt_files` |
+| Molecular prediction | TCGA EGFR | `diagnosis_and_prediction/dataset_csv/External_TCGA_EGFR.csv` | `TCGA__NSCLC/pt_files` |
+| Molecular prediction | TCGA STK11 | `diagnosis_and_prediction/dataset_csv/TCGA_STK11.csv` | `TCGA__NSCLC/pt_files` |
+| Survival | TCGA-LUAD OS | `survival_analysis/dataset_csv/LUAD.csv` | `TCGA__NSCLC/pt_files` |
+| Survival | TCGA-LUSC OS | `survival_analysis/dataset_csv/LUSC.csv` | `TCGA__NSCLC/pt_files` |
+
 ## Quick Start
 
 ### Basic Usage
@@ -84,6 +139,143 @@ batch = torch.stack(images).cuda()  # Shape: [N, 3, H, W]
 # Extract features for all images at once
 features = model(batch)  # Shape: [N, 2560]
 ```
+
+## Reproducing Diagnosis and Molecular Prediction Examples
+
+Run commands from `diagnosis_and_prediction/`.
+
+Set the feature root:
+
+```bash
+cd diagnosis_and_prediction
+FEATURE_ROOT=/path/to/TCGA__NSCLC/pt_files
+```
+
+Evaluate TCGA NSCLC subtyping:
+
+```bash
+python main.py \
+  --model ABMIL \
+  --study External_TCGA_NSCLC \
+  --root ${FEATURE_ROOT} \
+  --feature PulmoFoundation-E2 \
+  --csv_file dataset_csv/External_TCGA_NSCLC.csv \
+  --evaluate \
+  --resume ./results/results_42/NSCLC/[ABMIL] \
+  --tqdm
+```
+
+Evaluate TCGA EGFR prediction:
+
+```bash
+python main.py \
+  --model ABMIL \
+  --study External_TCGA_EGFR \
+  --root ${FEATURE_ROOT} \
+  --feature PulmoFoundation-E2 \
+  --csv_file dataset_csv/External_TCGA_EGFR.csv \
+  --evaluate \
+  --resume ./results/results_42/EGFR/[ABMIL] \
+  --tqdm
+```
+
+Evaluation results are saved under the selected checkpoint directory.
+
+## Reproducing Survival Analysis Examples
+
+Run commands from `survival_analysis/`.
+
+Set the feature root:
+
+```bash
+cd survival_analysis
+FEATURE_ROOT=/path/to/TCGA__NSCLC/pt_files
+```
+
+Train TCGA-LUAD survival model:
+
+```bash
+python main.py \
+  --model AttMIL \
+  --csv_file ./dataset_csv/LUAD.csv \
+  --feature_path ${FEATURE_ROOT} \
+  --feature PulmoFoundation-E2 \
+  --study LUAD \
+  --modal WSI \
+  --num_epoch 20 \
+  --batch_size 1 \
+  --lr 2e-4
+```
+
+Train TCGA-LUSC survival model:
+
+```bash
+python main.py \
+  --model AttMIL \
+  --csv_file ./dataset_csv/LUSC.csv \
+  --feature_path ${FEATURE_ROOT} \
+  --feature PulmoFoundation-E2 \
+  --study LUSC \
+  --modal WSI \
+  --num_epoch 20 \
+  --batch_size 1 \
+  --lr 2e-4
+```
+
+Survival outputs are written to:
+
+```text
+survival_analysis/results/WSI/<TASK>/...
+```
+
+## CSV and Feature Naming Conventions
+
+Diagnosis CSV files use this schema:
+
+```text
+case,slide,label,fold
+```
+
+For diagnosis, the `slide` column should not include `.pt`; the loader appends `.pt` internally.
+
+Survival CSV files use this schema:
+
+```text
+Study,ID,Event,Status,WSI,split
+```
+
+For survival, the `WSI` column should include the `.pt` suffix.
+
+If one case has multiple slides, join slide names with `;`.
+
+## Expected Outputs
+
+Diagnosis training writes outputs to:
+
+```text
+diagnosis_and_prediction/results/
+```
+
+Diagnosis external evaluation writes result CSVs and prediction files under the selected checkpoint directory.
+
+Survival training writes C-index summaries, bootstrap intervals, and risk outputs to:
+
+```text
+survival_analysis/results/WSI/<TASK>/...
+```
+
+## Scope of This Release
+
+This repository releases:
+
+- PulmoFoundation model loading code.
+- Downstream diagnosis and molecular prediction workflows.
+- Downstream survival analysis workflows.
+- Public TCGA-NSCLC feature tensors for reviewer testing.
+- Public TCGA CSV manifests.
+- Released ABMIL checkpoints for TCGA NSCLC and EGFR evaluation.
+
+Private institutional slides, private feature tensors, and private annotation files are not included.
 
 ## Acknowledgments
 
