@@ -46,7 +46,6 @@ ENV/
 *.npy
 *.npz
 data/
-results/
 outputs/
 
 # Logs

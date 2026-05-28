@@ -40,7 +40,7 @@ def get_model(device, checkpoint_path):
         callable: A function that takes an image tensor and returns embeddings
         
     Example:
-        >>> model = get_model('cuda', 'models/ckpts/PulmoFoundation-E2.pth')
+        >>> model = get_model('cuda', 'model_loading/ckpts/PulmoFoundation-E2.pth')
         >>> img = transform(Image.open('image.jpg'))
         >>> img = img.unsqueeze(0).cuda()  # Add batch dimension
         >>> features = model(img)  # Returns [N, 2560] embeddings
@@ -133,4 +133,3 @@ def get_model(device, checkpoint_path):
     except Exception as e:
         print(f"Error loading PulmoFoundation model: {e}")
         raise
-

@@ -5,7 +5,7 @@
 ## Installation
 
 ### Prerequisites
-- Request for Virchow2 model on [Huggingface](https://huggingface.co/paige-ai/Virchow2).
+- Request access to the Virchow2 model on [Hugging Face](https://huggingface.co/paige-ai/Virchow2).
 
 ### Install Dependencies
 
@@ -13,29 +13,45 @@
 git clone https://github.com/dddavid4real/PulmoFoundation
 cd PulmoFoundation
 pip install -r requirements.txt
+pip install -e .
 ```
+
+The editable install registers the importable `model_loading` package, so examples can use `from model_loading import get_model, get_transform` from outside the repository directory as well. The downstream diagnosis and survival folders are script-based workflows and should be run from their own directories.
 
 ### Download Model Checkpoint
 
-🌟 The pretrained checkpoint of PulmoFoundation is provided [here](https://huggingface.co/david4real/PulmoFoundation).
+The pretrained checkpoint of PulmoFoundation is provided [here](https://huggingface.co/david4real/PulmoFoundation).
 
-Download the pre-trained checkpoint and place it in `models/ckpts/`:
+Download the pretrained checkpoint and place it in `model_loading/ckpts/`:
 
 ```bash
-mkdir -p models/ckpts
-# Download PulmoFoundation-E2.pth from HuggingFace to models/ckpts/
+mkdir -p model_loading/ckpts
+# Download PulmoFoundation-E2.pth from Hugging Face to model_loading/ckpts/
 ```
+
+## Repository Layout
+
+```text
+PulmoFoundation/
+  model_loading/              # PulmoFoundation encoder and transforms
+  diagnosis_and_prediction/   # MIL diagnosis, molecular prediction, and external evaluation
+  survival_analysis/          # Survival MIL, C-index, and risk scores
+```
+
+For WSI preprocessing, including coordinate extraction, patch cropping, and feature extraction, use [PrePATH](https://github.com/birkhoffkiki/PrePATH/tree/main). This repository starts from extracted patch features for downstream diagnosis and survival workflows.
+
+See [diagnosis_and_prediction](diagnosis_and_prediction/) and [survival_analysis](survival_analysis/) for the released downstream MIL workflows.
 
 ## Quick Start
 
 ### Basic Usage
 
 ```python
-from models import get_model, get_transform
+from model_loading import get_model, get_transform
 from PIL import Image
 
 # Load model and preprocessing pipeline
-model = get_model('cuda', 'models/ckpts/PulmoFoundation-E2.pth')
+model = get_model('cuda', 'model_loading/ckpts/PulmoFoundation-E2.pth')
 transform = get_transform()
 
 # Load and preprocess image
@@ -53,11 +69,11 @@ print(f"Feature vector: {features}")
 ### Batch Processing
 
 ```python
-from models import get_model, get_transform
+from model_loading import get_model, get_transform
 from PIL import Image
 import torch
 
-model = get_model('cuda', 'models/ckpts/PulmoFoundation-E2.pth')
+model = get_model('cuda', 'model_loading/ckpts/PulmoFoundation-E2.pth')
 transform = get_transform()
 
 # Process multiple images
@@ -72,7 +88,7 @@ features = model(batch)  # Shape: [N, 2560]
 ## Acknowledgments
 
 - Built on [Virchow2](https://huggingface.co/paige-ai/Virchow2) by Paige AI
-- Inspired by [CLAM](https://github.com/mahmoodlab/CLAM) for WSI processing
+- WSI preprocessing is handled by [PrePATH](https://github.com/birkhoffkiki/PrePATH/tree/main)
 - Uses [PEFT](https://github.com/huggingface/peft) for efficient continual pretraining
 
 ## Version History
