@@ -77,7 +77,13 @@ Update `ROOT_WSI` in [scripts/internal.sh](scripts/internal.sh), then run:
 bash scripts/internal.sh
 ```
 
-Equivalent direct command:
+For direct training, set the feature root:
+
+```bash
+FEATURE_ROOT=/path/to/TCGA__NSCLC/pt_files
+```
+
+Train TCGA STK11 molecular prediction:
 
 ```bash
 python main.py \

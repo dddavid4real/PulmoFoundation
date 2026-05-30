@@ -55,8 +55,7 @@ Raw WSI
   -> PrePATH tissue detection, tiling, and patch extraction
   -> PulmoFoundation-E2 patch feature extraction
   -> Slide-level feature tensors in TCGA__NSCLC/pt_files/
-  -> ABMIL diagnosis and molecular prediction
-  -> AttMIL survival analysis
+  -> Diagnosis and molecular prediction / Survival analysis
 ```
 
 ## Public TCGA-NSCLC Feature Package
@@ -171,6 +170,21 @@ Set the feature root:
 ```bash
 cd diagnosis_and_prediction
 FEATURE_ROOT=/path/to/TCGA__NSCLC/pt_files
+```
+
+Train TCGA STK11 molecular prediction:
+
+```bash
+python main.py \
+  --model ABMIL \
+  --study TCGA_STK11 \
+  --root ${FEATURE_ROOT} \
+  --feature PulmoFoundation-E2 \
+  --csv_file dataset_csv/TCGA_STK11.csv \
+  --num_epoch 25 \
+  --batch_size 1 \
+  --lr 2e-4 \
+  --tqdm
 ```
 
 Evaluate TCGA NSCLC subtyping:
