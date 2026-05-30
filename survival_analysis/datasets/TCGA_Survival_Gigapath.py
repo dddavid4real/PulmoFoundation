@@ -17,7 +17,6 @@ class TCGA_Survival_Gigapath(data.Dataset):
     def __init__(self, csv_file, feature_path, modal, study, feature):
         self.modal = modal
         self.final_feature_path = os.path.join(feature_path, f'{feature}')
-        # self.coord_path = os.path.join(feature_path, 'h5_files')  # Coordinates in h5_files
         self.coord_path = feature_path.replace("/pt_files", "/patches").replace("\\pt_files", "\\patches")
         
         print(f'feature path: {feature_path}')

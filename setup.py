@@ -12,7 +12,7 @@ with open("requirements.txt", "r", encoding="utf-8") as fh:
 
 setup(
     name="pulmofoundation",
-    version="1.0.0",
+    version="1.1.0",
     author="Zhengrui Guo",
     author_email="zguobc@connect.ust.hk",
     description="A foundation model for lung pathology whole-slide image analysis",

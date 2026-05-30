@@ -101,7 +101,6 @@ def main(args):
         dataset = TCGA_Survival(csv_file=args.csv_file, feature_path=args.feature_path, modal=args.modal, study=args.study, feature=args.feature)
     args.num_classes = 4
     
-    #* Automatically Load Feature Size
     args.data = pd.read_csv(args.csv_file)
     loaded = False
     root = args.feature_path

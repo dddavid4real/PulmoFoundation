@@ -43,7 +43,7 @@ PulmoFoundation/
   survival_analysis/          # Survival MIL, C-index, and risk scores
 ```
 
-For WSI preprocessing, including coordinate extraction, patch cropping, and feature extraction, use [PrePATH](https://github.com/birkhoffkiki/PrePATH/tree/main). This repository starts from extracted patch features for downstream diagnosis and survival workflows.
+For WSI preprocessing, including coordinate extraction, patch cropping, and feature extraction, use [PrePATH](https://github.com/birkhoffkiki/PrePATH/tree/main). This repository starts from extracted patch features for downstream diagnosis and survival workflows. Raw WSI-to-feature extraction is not part of the runnable examples in this release. Diagnosis and survival examples start from the provided `TCGA__NSCLC/pt_files/PulmoFoundation-E2/*.pt` feature tensors.
 
 See [diagnosis_and_prediction](diagnosis_and_prediction/) and [survival_analysis](survival_analysis/) for the released downstream MIL workflows.
 
@@ -105,6 +105,8 @@ The same `TCGA__NSCLC/pt_files` feature folder is used for the released TCGA NSC
 | Molecular prediction | TCGA STK11 | `diagnosis_and_prediction/dataset_csv/TCGA_STK11.csv` | `TCGA__NSCLC/pt_files` |
 | Survival | TCGA-LUAD OS | `survival_analysis/dataset_csv/LUAD.csv` | `TCGA__NSCLC/pt_files` |
 | Survival | TCGA-LUSC OS | `survival_analysis/dataset_csv/LUSC.csv` | `TCGA__NSCLC/pt_files` |
+
+The released ABMIL checkpoints support direct external evaluation for TCGA NSCLC subtyping and TCGA EGFR prediction. TCGA STK11 is provided as a training example from the public TCGA feature tensors and CSV manifest; a trained STK11 checkpoint is not bundled in this release.
 
 ## Quick Start
 
@@ -191,6 +193,7 @@ python main.py \
 Evaluation results are saved under the selected checkpoint directory.
 
 ## Reproducing Survival Analysis Examples
+Survival examples are released as training workflows from TCGA features. Trained survival checkpoints are not bundled in this release.
 
 Run commands from `survival_analysis/`.
 
@@ -236,8 +239,6 @@ Survival outputs are written to:
 ```text
 survival_analysis/results/WSI/<TASK>/...
 ```
-
-Survival examples are released as training workflows from TCGA features. Trained survival checkpoints are not bundled in this release.
 
 ## CSV and Feature Naming Conventions
 
@@ -287,7 +288,7 @@ This repository releases:
 - Released ABMIL checkpoints for TCGA NSCLC and EGFR evaluation.
 - Survival training workflows for TCGA-LUAD and TCGA-LUSC.
 
-Private institutional slides, private feature tensors, and private annotation files are not included.
+Private institutional slides, private feature tensors, and private annotation files are not included. Prospective validation, triage-threshold analyses, and crossover RCT analyses depend on restricted institutional data and are not included in the public runnable examples.
 
 ## Acknowledgments
 

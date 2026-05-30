@@ -2,7 +2,7 @@
 
 This folder contains the downstream MIL pipeline for survival prediction from pre-extracted PulmoFoundation features. It trains a discrete-time survival model, reports C-index, and saves bootstrap confidence intervals. The released examples use AttMIL with PulmoFoundation-E2 features.
 
-For WSI preprocessing, coordinate extraction, patch cropping, and feature extraction, use [PrePATH](https://github.com/birkhoffkiki/PrePATH/tree/main). This code expects slide-level patch feature tensors that have already been extracted.
+For WSI preprocessing, coordinate extraction, patch cropping, and feature extraction, use [PrePATH](https://github.com/birkhoffkiki/PrePATH/tree/main). This code expects slide-level patch feature tensors that have already been extracted. The runnable examples in this folder start from the provided `.pt` feature tensors rather than raw WSI files.
 
 ## Setup
 
@@ -67,7 +67,7 @@ TCGA-LUAD,case_id,event_time,event_status,slide_name.pt,validation
 TCGA-LUAD,case_id,event_time,event_status,slide_name.pt,test
 ```
 
-`Event` is the survival time, `Status` is the event indicator, and `split` should use `train`, `validation`, or `test`. The kept CSV examples are in [dataset_csv](dataset_csv/).
+`Event` is the survival time, `Status` is the event indicator, and `split` should use `train`, `validation`, or `test`. The kept CSV examples are in [dataset_csv](dataset_csv/). For the released survival examples, the public CSV keeps `validation` and `test` labels for loader compatibility. The survival analysis is reported as a 7:3 train/evaluation workflow, with `validation` and `test` combined as the held-out evaluation subset.
 
 ## Training
 

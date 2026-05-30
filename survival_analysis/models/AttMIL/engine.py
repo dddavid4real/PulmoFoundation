@@ -25,7 +25,6 @@ class Engine(object):
         self.filename_best = None
         self.best_bootstrap_samples = None  # NEW: Store bootstrap samples from best model
 
-    #! NEW: Add checkpoint finder (mirroring diagnosis code)
     def find_latest_checkpoint(self, root_dir, model_name):
         """
         Find the latest checkpoint directory for a given model name.
@@ -118,15 +117,12 @@ class Engine(object):
         print(f"[ERROR] No checkpoint file found in {latest_dir_path}")
         return None
 
-    # ORIGINAL METHOD - UNCHANGED
     def learning(self, model, train_loader, val_loader, test_dataset, criterion, optimizer, scheduler):
         if torch.cuda.is_available():
             model = model.cuda()
         
-        #! FIX: Initialize epoch for evaluation mode
         self.epoch = 0
         
-        #! MODIFIED: Handle directory-based checkpoint loading for evaluation mode
         if self.args.resume is not None:
             # Check if it's a directory (evaluation mode) or file (training resume)
             if os.path.isdir(self.args.resume):
@@ -152,22 +148,6 @@ class Engine(object):
             else:
                 print("=> no checkpoint found at '{}'".format(self.args.resume))
 
-        #! MODIFIED: Proper evaluation mode with bootstrap
-        # if self.args.evaluate:
-        #     print("=> Running evaluation mode on external dataset")
-        #     # Run validation with bootstrap on the external test set
-        #     c_index, patient_results, bootstrap_samples = self.validate_with_bootstrap(val_loader, model, criterion)
-            
-        #     # Calculate confidence intervals from bootstrap samples
-        #     c_index_samples = np.array(bootstrap_samples["C_Index"])
-        #     ci_lower = np.percentile(c_index_samples, 2.5)
-        #     ci_upper = np.percentile(c_index_samples, 97.5)
-        #     mean_c_index = c_index_samples.mean()
-            
-        #     print(' *** Evaluation C-index: {:.4f} ({:.4f}, {:.4f})'.format(mean_c_index, ci_lower, ci_upper))
-            
-        #     return mean_c_index, ci_lower, ci_upper, bootstrap_samples
-        #! MODIFIED: Proper evaluation mode with bootstrap, and save results for KM Curve Plotting
         if self.args.evaluate:
             print("=> Running evaluation mode on external dataset")
             # Run validation with bootstrap on the external test set
@@ -181,7 +161,6 @@ class Engine(object):
             
             print(' *** Evaluation C-index: {:.4f} ({:.4f}, {:.4f})'.format(mean_c_index, ci_lower, ci_upper))
             
-            #! NEW: Save patient results for KM curve plotting with study-specific naming
             # patient_results contains all data needed: ID, risk, survival time, censorship
             study_prefix = self.args.study if hasattr(self.args, 'study') and self.args.study else None
             self.save_pkl(patient_results, prefix=study_prefix)
@@ -219,7 +198,6 @@ class Engine(object):
         print('start testing')
         model.load_state_dict(torch.load(self.filename_best)['state_dict'])
         
-        # NEW: Get patient-level test predictions before bootstrap
         from torch.utils.data import DataLoader
         test_loader = DataLoader(test_dataset, batch_size=1, shuffle=False)
         _, test_patient_results = self.validate(test_loader, model, criterion)
@@ -228,9 +206,6 @@ class Engine(object):
         self.save_pkl(test_patient_results, prefix='Internal')
         self.save_predictions_csv(test_patient_results, prefix='Internal')
 
-        #* Original: might sample all censored data
-        # mean_c_index, ci_lower, ci_upper = bootstrap_survivalv2(model, test_dataset, n_iterations=1000, device='cuda') 
-        #* Update: Retry logic
         import time
         max_attempts = 100  # safety limit to avoid infinite loop
         attempt = 0
@@ -252,10 +227,8 @@ class Engine(object):
 
         return mean_c_index, ci_lower, ci_upper
 
-    # NEW METHOD - Added for bootstrap functionality
     def learning_with_bootstrap(self, model, train_loader, val_loader, test_dataset, criterion, optimizer, scheduler):
         """Same as learning but returns bootstrap samples as 4th value"""
-        #! MODIFIED: Handle both training and evaluation modes
         result = self.learning(model, train_loader, val_loader, test_dataset, criterion, optimizer, scheduler)
         
         # In evaluation mode, learning() returns 4 values already
@@ -269,7 +242,6 @@ class Engine(object):
             # Shouldn't happen but handle gracefully
             return None, None, None, None
 
-    # ORIGINAL METHOD - UNCHANGED  
     def train(self, data_loader, model, criterion, optimizer):
         model.train()
 
@@ -305,7 +277,6 @@ class Engine(object):
             self.writer.add_scalar('train/loss', loss, self.epoch)
             self.writer.add_scalar('train/c_index', c_index, self.epoch)
 
-    # ORIGINAL METHOD - UNCHANGED
     def validate(self, data_loader, model, criterion):
         model.eval()
         total_loss = 0.0
@@ -343,7 +314,6 @@ class Engine(object):
             
         return c_index, patient_results
 
-    # NEW METHOD - Added for bootstrap functionality
     def validate_with_bootstrap(self, data_loader, model, criterion):
         """Same as validate but also returns bootstrap samples as 3rd value"""
         c_index, patient_results = self.validate(data_loader, model, criterion)
@@ -370,7 +340,6 @@ class Engine(object):
         bootstrap_samples = self.custom_bootstrap_sampling(all_risk_scores, all_censorships, all_event_times)
         return c_index, patient_results, bootstrap_samples
 
-    # NEW METHOD - Added for bootstrap functionality
     def custom_bootstrap_sampling(self, risk_scores, censorships, event_times, n_bootstrap=1000, random_seed=42):
         """
         Custom bootstrap sampling for C-index that returns individual samples for statistical testing
@@ -418,7 +387,6 @@ class Engine(object):
         
         return bootstrap_samples
 
-    # ORIGINAL METHODS - UNCHANGED
     def save_checkpoint(self, state):
         if self.filename_best is not None:
             os.remove(self.filename_best)
@@ -447,7 +415,6 @@ class Engine(object):
             pickle.dump(results, writer)
         print(f"[Saved] Patient results (pickle): {results_pkl_path}")
         
-    #! NEW: Save predictions as CSV for easier analysis
     def save_predictions_csv(self, patient_results, prefix=None):
         """
         Save patient-level predictions to CSV for KM curve plotting
