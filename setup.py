@@ -16,6 +16,7 @@ setup(
     author="Zhengrui Guo",
     author_email="zguobc@connect.ust.hk",
     description="A foundation model for lung pathology whole-slide image analysis",
+    license="CC BY-NC-ND 4.0",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/dddavid4real/PulmoFoundation",
@@ -25,11 +26,10 @@ setup(
         "Intended Audience :: Science/Research",
         "Topic :: Scientific/Engineering :: Artificial Intelligence",
         "Programming Language :: Python :: 3.11",
-        "License :: OSI Approved :: Apache 2.0 License",
+        "License :: Other/Proprietary License",
         "Operating System :: OS Independent",
     ],
     python_requires=">=3.8",
     install_requires=requirements,
     keywords="pathology, medical imaging, deep learning, foundation model, lung cancer",
 )
-

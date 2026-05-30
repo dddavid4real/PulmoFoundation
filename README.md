@@ -295,6 +295,28 @@ Private institutional slides, private feature tensors, and private annotation fi
 - WSI preprocessing is handled by [PrePATH](https://github.com/birkhoffkiki/PrePATH/tree/main)
 - Uses [PEFT](https://github.com/huggingface/peft) for efficient continual pretraining
 
+## License and Terms of Use
+The models and associated code are released under the [CC BY-NC-ND 4.0 license](https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode) and may only be used for non-commercial, academic research purposes with proper attribution. Any commercial use, sale, sublicensing, or other monetization of the PulmoFoundation models and their derivatives, is prohibited and requires prior written approval.
+
+Downloading the models or feature packages may require prior registration on Hugging Face and agreement to the applicable terms of use. By downloading the models, you agree not to distribute, publish, or reproduce copies of the models. If another user within your organization wishes to use the models, they must register as an individual user and agree to comply with the terms of use.
+
+Users may not attempt to re-identify any deidentified data used to develop the underlying models or feature packages. Commercial entities should contact the corresponding author or appropriate institutional licensing office.
+
+See [LICENSE](LICENSE) for the repository license notice.
+
+## Citation
+
+If you use PulmoFoundation in your research, please cite:
+
+```bibtex
+@article{guo2026clinically,
+  title={A Clinically Validated Foundation Model for Comprehensive Lung Pathology Interpretation},
+  author={Guo, Zhengrui and Zhang, Zhengyu and Ma, Jiabo and Wang, Yihui and Zhou, Fengtao and Xu, Yingxue and Liang, Ling and Zhao, Chenglong and Xie, Qi and Li, Jinbang and others},
+  journal={arXiv preprint arXiv:2605.25878},
+  year={2026}
+}
+```
+
 ## Version History
 
 - **v1.1.0** (2026-05): Update with PulmoFoundation Downstream Evaluation Workflow
