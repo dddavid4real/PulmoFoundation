@@ -1,6 +1,6 @@
 # Survival Analysis
 
-This folder contains the downstream MIL pipeline for survival prediction from pre-extracted PulmoFoundation features. It trains a discrete-time survival model, reports C-index, and saves bootstrap confidence intervals. The released examples use AttMIL with PulmoFoundation-E2 features.
+This folder contains the downstream MIL pipeline for survival prediction from pre-extracted PulmoFoundation features. It trains a discrete-time survival model, reports C-index, and saves bootstrap confidence intervals. The released examples use ABMIL with PulmoFoundation features.
 
 For WSI preprocessing, coordinate extraction, patch cropping, and feature extraction, use [PrePATH](https://github.com/birkhoffkiki/PrePATH/tree/main). This code expects slide-level patch feature tensors that have already been extracted. The runnable examples in this folder start from the provided `.pt` feature tensors rather than raw WSI files.
 
@@ -115,7 +115,7 @@ python main.py \
 
 Training outputs are written to `results/`.
 
-## Evaluation
+<!-- ## Evaluation
 
 Survival examples are released as training workflows from TCGA features. Trained survival checkpoints are not bundled in this release.
 
@@ -135,4 +135,4 @@ python main.py \
   --resume ./results/WSI/LUAD
 ```
 
-Evaluation writes a result CSV, bootstrap samples, and patient-level risk predictions into the selected checkpoint directory.
+Evaluation writes a result CSV, bootstrap samples, and patient-level risk predictions into the selected checkpoint directory. -->

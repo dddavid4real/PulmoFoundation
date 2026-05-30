@@ -259,12 +259,6 @@ python main.py \
   --lr 2e-4
 ```
 
-Survival outputs are written to:
-
-```text
-survival_analysis/results/WSI/<TASK>/...
-```
-
 ## CSV and Feature Naming Conventions
 
 Diagnosis CSV files use this schema:
@@ -311,6 +305,7 @@ This repository releases:
 - Public TCGA-NSCLC feature tensors for reviewer testing.
 - Public TCGA CSV manifests.
 - Released ABMIL checkpoints for TCGA NSCLC and EGFR evaluation.
+- Diagnosis training workflow for TCGA STK11 mutation prediction.
 - Survival training workflows for TCGA-LUAD and TCGA-LUSC.
 
 Private institutional slides, private feature tensors, and private annotation files are not included. Prospective validation, triage-threshold analyses, and crossover RCT analyses depend on restricted institutional data and are not included in the public runnable examples.

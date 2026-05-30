@@ -1,6 +1,6 @@
 # Diagnosis and Prediction
 
-This folder contains the downstream MIL pipeline for slide-level diagnosis, molecular prediction, and external validation from pre-extracted PulmoFoundation features. The released examples use ABMIL with PulmoFoundation-E2 features.
+This folder contains the downstream MIL pipeline for slide-level diagnosis, molecular prediction, and external validation from pre-extracted PulmoFoundation features. The released examples use ABMIL with PulmoFoundation features.
 
 For WSI preprocessing, coordinate extraction, patch cropping, and feature extraction, use [PrePATH](https://github.com/birkhoffkiki/PrePATH/tree/main). This code expects slide-level patch feature tensors that have already been extracted. The runnable examples in this folder start from the provided `.pt` feature tensors rather than raw WSI files.
 
