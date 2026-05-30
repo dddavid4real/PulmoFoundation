@@ -36,6 +36,8 @@ ENV/
 # Jupyter
 .ipynb_checkpoints/
 *.ipynb
+!notebooks/
+!notebooks/01_model_loading_quickstart.ipynb
 
 # Model checkpoints (optional - uncomment if you don't want to track checkpoints)
 # models/ckpts/*.pth
@@ -61,4 +63,3 @@ Thumbs.db
 *.tmp
 temp/
 tmp/
-

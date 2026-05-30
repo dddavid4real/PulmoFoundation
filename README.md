@@ -39,6 +39,7 @@ mkdir -p model_loading/ckpts
 ```text
 PulmoFoundation/
   model_loading/              # PulmoFoundation encoder and transforms
+  notebooks/                  # Interactive model-loading quickstart
   diagnosis_and_prediction/   # MIL diagnosis, molecular prediction, and external evaluation
   survival_analysis/          # Survival MIL, C-index, and risk scores
 ```
@@ -109,6 +110,16 @@ The same `TCGA__NSCLC/pt_files` feature folder is used for the released TCGA NSC
 The released ABMIL checkpoints support direct external evaluation for TCGA NSCLC subtyping and TCGA EGFR prediction. TCGA STK11 is provided as a training example from the public TCGA feature tensors and CSV manifest; a trained STK11 checkpoint is not bundled in this release.
 
 ## Quick Start
+
+### Interactive Notebook
+
+For an interactive encoder-loading demo, open [notebooks/01_model_loading_quickstart.ipynb](notebooks/01_model_loading_quickstart.ipynb). The notebook loads `model_loading`, checks the PulmoFoundation-E2 checkpoint path, extracts a single patch embedding, and demonstrates batch extraction.
+
+If you use Jupyter locally, run:
+
+```bash
+jupyter notebook notebooks/01_model_loading_quickstart.ipynb
+```
 
 ### Basic Usage
 
