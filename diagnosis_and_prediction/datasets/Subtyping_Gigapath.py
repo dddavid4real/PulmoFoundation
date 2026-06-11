@@ -53,13 +53,21 @@ class Dataset_Subtyping_Gigapath(data.Dataset):
         # Get the dimension of WSI features from first available slide
         self.n_features = None
         for root in self.root:
-            pt_path = os.path.join(root, self.feature, str(self.data["slide"].values[0]) + ".pt")
-            if os.path.exists(pt_path):
-                self.n_features = torch.load(pt_path).shape[-1]
+            for slide_field in self.data["slide"].astype(str):
+                for s in slide_field.split(";"):
+                    pt_path = os.path.join(root, self.feature, s.strip() + ".pt")
+                    if os.path.exists(pt_path):
+                        self.n_features = torch.load(pt_path).shape[-1]
+                        break
+                if self.n_features is not None:
+                    break
+            if self.n_features is not None:
                 break
         
         if self.n_features is None:
-            raise ValueError(f"Could not find feature files in any of the roots: {self.root}")
+            raise FileNotFoundError(
+                "No feature .pt files found under {} for feature {}".format(self.root, self.feature)
+            )
         
         # Build case list
         self.cases = []

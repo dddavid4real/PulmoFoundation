@@ -31,11 +31,23 @@ class Dataset_Subtyping(data.Dataset):
         self.data["label"] = self.data["label"].cat.codes
         # get number of classes
         self.num_classes = len(self.data["label"].unique())
-        # get the dimension of WSI features from "slide" column
+        # get the dimension of WSI features from the first available slide
+        self.n_features = None
         for root in self.root:
-            if os.path.exists(os.path.join(root, self.feature, str(self.data["slide"].values[0]) + ".pt")):
-                self.n_features = torch.load(os.path.join(root, self.feature, str(self.data["slide"].values[0]) + ".pt")).shape[-1]
+            for slide_field in self.data["slide"].astype(str):
+                for s in slide_field.split(";"):
+                    pt_path = os.path.join(root, self.feature, s.strip() + ".pt")
+                    if os.path.exists(pt_path):
+                        self.n_features = torch.load(pt_path).shape[-1]
+                        break
+                if self.n_features is not None:
+                    break
+            if self.n_features is not None:
                 break
+        if self.n_features is None:
+            raise FileNotFoundError(
+                "No feature .pt files found under {} for feature {}".format(self.root, self.feature)
+            )
         self.cases = []
         for idx in range(len(self.data)):
             case = self.data.iloc[idx, :].values.tolist()[:3]
